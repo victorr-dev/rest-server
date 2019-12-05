@@ -1,5 +1,8 @@
 const express = require('express')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
+
+const apiUser = require('./controllers/user')
 
 const config = require('../config/config') 
 
@@ -8,27 +11,17 @@ const app = express()
 app.use(express.urlencoded({extended:true}))
 
 app.use(morgan('dev'))
+app.use(apiUser)
 
-app.get('/usuario', (req, res, next) => {
-    res.json('getUsuario')
-})
 
-app.post('/usuario', (req, res, next) => {
-    let body = req.body;
-    res.json(body)
-})
-
-app.put('/usuario/:id', (req, res, next) => {
-    let id = req.params.id
-    res.json({
-        id
-    })
-})
-
-app.delete('/usuario', (req, res, next) => {
-    res.json('deleteUsuario')
+mongoose.connect('mongodb+srv://admin:admin@cluster0-ufbbq.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser:true, useUnifiedTopology: true}, (err)=>{
+    if(err){
+        console.error(err)
+        process.exit(1)
+    }
+    console.log('Conexión a la base de datos establecida')
 })
 
 app.listen(config.PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${config.PORT}`, config.MESSAGE)
+    console.log(`Servidor corriendo en el puerto ${config.PORT}`)
 })
