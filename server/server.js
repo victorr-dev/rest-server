@@ -14,7 +14,20 @@ app.use(morgan('dev'))
 app.use(apiUser)
 
 
-mongoose.connect('mongodb+srv://admin:admin@cluster0-ufbbq.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser:true, useUnifiedTopology: true}, (err)=>{
+app.use((err, req, res, next) => {
+    if (err.message.match(/not found/)) {
+      return res.status(404).send({
+        error: err.message
+      })
+    }
+    res.status(500).send({
+      success: false,  
+      error: err.message
+    })
+  })
+
+mongoose.connect('mongodb+srv://admin:admin@cluster0-ufbbq.mongodb.net/test?retryWrites=true&w=majority',
+                 { useNewUrlParser:true, useUnifiedTopology: true}, (err)=>{
     if(err){
         console.error(err)
         process.exit(1)
