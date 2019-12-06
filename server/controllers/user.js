@@ -1,45 +1,79 @@
-const { Router } = require('express')
+const {
+    Router
+} = require('express')
 const Usuario = require('../models/user')
 
 const router = Router()
 
-router.get('/usuario', (req, res, next) => {
-    res.json('getUsuario')
+router.get('/usuario',async (req, res, next) => {
+
+    const limite = Number(req.query.limite) || 5
+    const desde = Number(req.query.desde) || 0
+
+    console.log(limite, desde)
+    try {
+        const usuarios = await Usuario.find({}, 'name email img estado')
+                                    .skip(desde)
+                                    .limit(limite)
+        const totalUsers = await Usuario.count()
+        res.json({
+            success:true,
+            totalUsers, 
+            count: usuarios.length,
+            users: usuarios
+        })
+    } catch (error) {
+        return next(new Error(error.message))
+    }
 })
 
-router.post('/usuario',async (req, res, next) => {
-    const {name, email, password, role  } = req.body;
-
-    let usuario = new Usuario({
+router.post('/usuario', async (req, res, next) => {
+    const {
         name,
         email,
         password,
         role
+    } = req.body;
+
+    let usuario = new Usuario({
+        name,
+        email,
+        role
     })
 
     try {
+        usuario.password = await usuario.encryptPassword(password)
         const usuarioDb = await usuario.save()
         res.json({
             success: true,
             user: usuarioDb
         })
     } catch (error) {
-      
-        const errores = Object.keys(error.errors)
-        let messages = []
-        errores.forEach(element => {
-            messages.push(error.errors[element].message)
-        });
-        return next(new Error(messages))
+
+        if (error.code) {
+            return next(new Error(error.message))
+        } else {
+            const errores = Object.keys(error.errors)
+            let messages = []
+            errores.forEach(element => {
+                messages.push(error.errors[element].message)
+            });
+            return next(new Error(messages))
+        }
     }
-    
+
 })
 
-router.put('/usuario/:id', (req, res, next) => {
+router.put('/usuario/:id', async (req, res, next) => {
     let id = req.params.id
-    res.json({
-        id
-    })
+    const usuario = {name, email, img, role, estado} = req.body
+
+    try {
+        let result = await Usuario.findByIdAndUpdate(id, usuario, {new: true, runValidators:true})
+        return res.json(result)
+    } catch (error) {
+        return next(new Error(error.message))
+    }
 })
 
 router.delete('/usuario', (req, res, next) => {

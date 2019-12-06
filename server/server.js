@@ -27,7 +27,7 @@ app.use((err, req, res, next) => {
   })
 
 mongoose.connect('mongodb+srv://admin:admin@cluster0-ufbbq.mongodb.net/test?retryWrites=true&w=majority',
-                 { useNewUrlParser:true, useUnifiedTopology: true}, (err)=>{
+                 { useNewUrlParser:true, useUnifiedTopology: true, useCreateIndex: true}, (err)=>{
     if(err){
         console.error(err)
         process.exit(1)
