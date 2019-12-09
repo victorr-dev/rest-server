@@ -17,6 +17,7 @@ app.use(apiUser)
 app.use((err, req, res, next) => {
     if (err.message.match(/not found/)) {
       return res.status(404).send({
+        success:false,
         error: err.message
       })
     }
@@ -26,7 +27,7 @@ app.use((err, req, res, next) => {
     })
   })
 
-mongoose.connect('mongodb+srv://admin:admin@cluster0-ufbbq.mongodb.net/test?retryWrites=true&w=majority',
+mongoose.connect(config.URL,
                  { useNewUrlParser:true, useUnifiedTopology: true, useCreateIndex: true}, (err)=>{
     if(err){
         console.error(err)

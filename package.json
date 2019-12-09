@@ -1,6 +1,9 @@
 {
   "name": "rest-server",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.16.0"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.2",
+    "bcrypt": "3.0.2",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "mongoose": "5.7.13",
