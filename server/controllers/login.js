@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const route = Router()
 const Usuario = require('../models/user')
-const {CADUCIDAD_TOKEN,SEED} = require('../../config/config')
+const {CADUCIDAD_TOKEN,SEED} = require('../config/config')
 
 
 route.post('/login', async (req, res, next) => {

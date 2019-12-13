@@ -1,20 +1,20 @@
 const {
     Router
 } = require('express')
-const Usuario = require('../models/user')
-
 const router = Router()
+const Usuario = require('../models/user')
+const { verificaToken } = require('../middlewares/auth')
 
-router.get('/usuario', async (req, res, next) => {
+router.get('/usuario', verificaToken, async (req, res, next) => {
 
     const limite = Number(req.query.limite) || 5
     const desde = Number(req.query.desde) || 0
 
     try {
-        const usuarios = await Usuario.find({estado: true}, 'name email img estado')
+        const usuarios = await Usuario.find({ estado: true }, 'name email img estado')
             .skip(desde)
             .limit(limite)
-        const totalUsers = await Usuario.count({estado: true})
+        const totalUsers = await Usuario.count({ estado: true })
         res.json({
             success: true,
             totalUsers,
@@ -26,7 +26,7 @@ router.get('/usuario', async (req, res, next) => {
     }
 })
 
-router.post('/usuario', async (req, res, next) => {
+router.post('/usuario', verificaToken, async (req, res, next) => {
     const {
         name,
         email,
@@ -34,7 +34,7 @@ router.post('/usuario', async (req, res, next) => {
         role
     } = req.body;
 
-    let usuario = new Usuario({
+    const usuario = new Usuario({
         name,
         email,
         role
@@ -63,7 +63,7 @@ router.post('/usuario', async (req, res, next) => {
 
 })
 
-router.put('/usuario/:id', async (req, res, next) => {
+router.put('/usuario/:id', verificaToken, async (req, res, next) => {
     let id = req.params.id
     const usuario = {
         name,
@@ -87,7 +87,7 @@ router.put('/usuario/:id', async (req, res, next) => {
     }
 })
 
-router.delete('/usuario/:id', async (req, res, next) => {
+router.delete('/usuario/:id', verificaToken, async (req, res, next) => {
     const {
         id
     } = req.params

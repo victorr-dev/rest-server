@@ -3,7 +3,7 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 
 
-const config = require('../config/config')
+const config = require('./config/config')
 
 const app = express()
 
@@ -19,6 +19,7 @@ app.use((err, req, res, next) => {
       error: err.message
     })
   }
+  
   res.status(500).send({
     success: false,
     error: err.message
