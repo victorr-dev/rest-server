@@ -16,7 +16,7 @@ const verificaAdminRole = (req, res , next) =>{
     if(role === 'ADMIN_ROLE'){
         next()
     }else{
-        return next(Error('No Admin'))
+        return next(Error('El usuario no es administrador'))
     }
 }
 

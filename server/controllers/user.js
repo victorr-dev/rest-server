@@ -3,7 +3,7 @@ const {
 } = require('express')
 const router = Router()
 const Usuario = require('../models/user')
-const { verificaToken } = require('../middlewares/auth')
+const { verificaToken, verificaAdminRole } = require('../middlewares/auth')
 
 router.get('/usuario', verificaToken, async (req, res, next) => {
 
@@ -26,7 +26,7 @@ router.get('/usuario', verificaToken, async (req, res, next) => {
     }
 })
 
-router.post('/usuario', verificaToken, async (req, res, next) => {
+router.post('/usuario', [verificaToken, verificaAdminRole], async (req, res, next) => {
     const {
         name,
         email,
@@ -63,7 +63,7 @@ router.post('/usuario', verificaToken, async (req, res, next) => {
 
 })
 
-router.put('/usuario/:id', verificaToken, async (req, res, next) => {
+router.put('/usuario/:id', [verificaToken, verificaAdminRole], async (req, res, next) => {
     let id = req.params.id
     const usuario = {
         name,
@@ -87,7 +87,7 @@ router.put('/usuario/:id', verificaToken, async (req, res, next) => {
     }
 })
 
-router.delete('/usuario/:id', verificaToken, async (req, res, next) => {
+router.delete('/usuario/:id', [verificaToken, verificaAdminRole], async (req, res, next) => {
     const {
         id
     } = req.params
