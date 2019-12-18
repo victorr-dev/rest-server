@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const path = require('path')
 
 
 const config = require('./config/config')
@@ -9,9 +10,10 @@ const app = express()
 
 app.use(express.urlencoded({ extended: true }))
 
+
 app.use(morgan('dev'))
 app.use(require('./controllers/index'))
-
+app.use(express.static(path.resolve(__dirname,'./public')))
 app.use((err, req, res, next) => {
   if (err.message.match(/not found/)) {
     return res.status(404).send({

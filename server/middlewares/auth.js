@@ -20,6 +20,8 @@ const verificaAdminRole = (req, res , next) =>{
     }
 }
 
+
+
 module.exports = {
     verificaToken,
     verificaAdminRole
