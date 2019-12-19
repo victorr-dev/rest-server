@@ -1,12 +1,14 @@
 const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const path = require('path')
 
 
 const config = require('./config/config')
 
 const app = express()
+app.use(cors())
 
 app.use(express.urlencoded({ extended: true }))
 
