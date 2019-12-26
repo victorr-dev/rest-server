@@ -17,13 +17,13 @@ app.use(morgan('dev'))
 app.use(require('./controllers/index'))
 app.use(express.static(path.resolve(__dirname,'./public')))
 app.use((err, req, res, next) => {
+
   if (err.message.match(/not found/)) {
     return res.status(404).send({
       success: false,
       error: err.message
     })
   }
-  
   res.status(500).send({
     success: false,
     error: err.message
