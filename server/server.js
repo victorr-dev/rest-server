@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const fileupload = require('express-fileupload')
 const path = require('path')
 
 
@@ -11,7 +12,7 @@ const app = express()
 app.use(cors())
 
 app.use(express.urlencoded({ extended: true }))
-
+app.use(fileupload())
 
 app.use(morgan('dev'))
 app.use(require('./controllers/index'))
